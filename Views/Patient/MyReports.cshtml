@@ -1,0 +1,62 @@
+@model IEnumerable<FrontendEXAM.Models.Report>
+
+@{
+    ViewData["Title"] = "My Reports";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2><i class="bi bi-clipboard2-pulse me-2"></i>My Reports</h2>
+    <a asp-action="Dashboard" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back to Dashboard</a>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-2"></i>@ViewBag.Error</div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var report in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm h-100 report-card">
+                    <div class="card-header bg-gradient-purple text-white">
+                        <h5 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Medical Report</h5>
+                        <small class="text-white-50">Appointment #@report.AppointmentId</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="badge bg-danger mb-2">Diagnosis</span>
+                            <p class="mb-0 fw-bold">@report.Diagnosis</p>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(report.TestRecommended))
+                        {
+                            <div class="mb-3">
+                                <span class="badge bg-warning text-dark mb-2">Tests Recommended</span>
+                                <p class="mb-0">@report.TestRecommended</p>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(report.Remarks))
+                        {
+                            <div>
+                                <span class="badge bg-info mb-2">Remarks</span>
+                                <p class="mb-0">@report.Remarks</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center mt-5 py-5">
+        <i class="bi bi-clipboard2-pulse text-muted" style="font-size: 3rem;"></i>
+        <h5 class="text-muted mt-3">No reports yet.</h5>
+        <p class="text-muted">Your medical reports will appear here after your doctor visits.</p>
+    </div>
+}

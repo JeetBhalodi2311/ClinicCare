@@ -1,0 +1,104 @@
+@model IEnumerable<FrontendEXAM.Models.User>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var clinic = ViewBag.Clinic as FrontendEXAM.Models.Clinic;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h2>
+    <a asp-action="CreateUser" class="btn btn-success"><i class="bi bi-person-plus me-2"></i>Create New User</a>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-2"></i>@ViewBag.Error</div>
+}
+
+@if (clinic != null)
+{
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="stat-card bg-gradient-primary">
+                <i class="bi bi-people"></i>
+                <h3>@clinic.UserCount</h3>
+                <p>Total Users</p>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card bg-gradient-green">
+                <i class="bi bi-heart-pulse"></i>
+                <h3>@clinic.PatientCount</h3>
+                <p>Patients</p>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card bg-gradient-info">
+                <i class="bi bi-activity"></i>
+                <h3>@clinic.DoctorCount</h3>
+                <p>Doctors</p>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card bg-gradient-purple">
+                <i class="bi bi-reception-4"></i>
+                <h3>@clinic.ReceptionistCount</h3>
+                <p>Receptionists</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header bg-gradient-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-building me-2"></i>@clinic.Name <small class="text-white-50">(@clinic.Code)</small></h5>
+        </div>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header bg-gradient-dark text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bi bi-people me-2"></i>All Users</h5>
+        <span class="badge bg-light text-dark">@(Model?.Count() ?? 0) users</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var user in Model)
+                        {
+                            var badgeClass = user.Role?.ToLower() switch {
+                                "admin" => "role-admin",
+                                "doctor" => "role-doctor",
+                                "patient" => "role-patient",
+                                "receptionist" => "role-receptionist",
+                                _ => "bg-secondary"
+                            };
+                            <tr>
+                                <td class="fw-bold">
+                                    <i class="bi bi-person-circle me-2 text-muted"></i>@user.Name
+                                </td>
+                                <td>@user.Email</td>
+                                <td><span class="badge @badgeClass">@user.Role</span></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-4 text-muted">No users found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

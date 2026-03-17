@@ -1,0 +1,75 @@
+@model IEnumerable<FrontendEXAM.Models.Prescription>
+
+@{
+    ViewData["Title"] = "My Prescriptions";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2><i class="bi bi-capsule me-2"></i>My Prescriptions</h2>
+    <a asp-action="Dashboard" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back to Dashboard</a>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-2"></i>@ViewBag.Error</div>
+}
+
+@if (Model != null && Model.Any())
+{
+    foreach (var rx in Model)
+    {
+        <div class="card shadow-sm mb-4 prescription-card">
+            <div class="card-header bg-gradient-green text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-file-earmark-medical me-2"></i>Prescription</h5>
+                <small class="text-white-50">Appointment #@rx.AppointmentId</small>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(rx.Notes))
+                {
+                    <div class="mb-3 p-3 bg-light rounded">
+                        <strong><i class="bi bi-journal-text me-1"></i>Doctor's Notes:</strong>
+                        <p class="mb-0 mt-1">@rx.Notes</p>
+                    </div>
+                }
+
+                @if (rx.Medicines != null && rx.Medicines.Any())
+                {
+                    <h6 class="fw-bold mb-2"><i class="bi bi-prescription2 me-1"></i>Medicines</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Dosage</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var med in rx.Medicines)
+                                {
+                                    <tr>
+                                        <td class="fw-bold">@med.Name</td>
+                                        <td>@med.Dosage</td>
+                                        <td><span class="badge bg-info">@med.Duration</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted fst-italic">No medicines listed.</p>
+                }
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="text-center mt-5 py-5">
+        <i class="bi bi-capsule text-muted" style="font-size: 3rem;"></i>
+        <h5 class="text-muted mt-3">No prescriptions yet.</h5>
+        <p class="text-muted">Your prescriptions will appear here after your doctor visits.</p>
+    </div>
+}

@@ -1,0 +1,99 @@
+@model IEnumerable<FrontendEXAM.Models.DoctorQueueItem>
+
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2><i class="bi bi-activity me-2"></i>Today's Queue</h2>
+    <span class="badge bg-gradient-primary fs-6 px-3 py-2">
+        <i class="bi bi-calendar3 me-1"></i>@DateTime.Today.ToString("dd MMM yyyy")
+    </span>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger mb-3"><i class="bi bi-exclamation-triangle me-2"></i>@ViewBag.Error</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-gradient-dark text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bi bi-people me-2"></i>Patient Queue</h5>
+        <span class="badge bg-light text-dark">@(Model?.Count() ?? 0) patients</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 10%">Token</th>
+                        <th style="width: 25%">Patient</th>
+                        <th style="width: 20%">Status</th>
+                        <th style="width: 45%">Medical Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model.OrderBy(q => q.TokenNumber))
+                        {
+                            var statusClass = item.Status?.ToLower() switch {
+                                "done" => "status-done",
+                                "in_progress" => "status-in-progress",
+                                "skipped" => "status-skipped",
+                                _ => "status-waiting"
+                            };
+                            <tr>
+                                <td>
+                                    <span class="badge bg-gradient-dark fs-6 px-3 py-2">#@item.TokenNumber</span>
+                                </td>
+                                <td class="fw-bold">
+                                    <i class="bi bi-person-circle me-2 text-muted"></i>@item.PatientName
+                                </td>
+                                <td>
+                                    <span class="badge @statusClass">@item.Status?.ToUpper()</span>
+                                </td>
+                                <td>
+                                    @if (item.Status == "in_progress" || item.Status == "done")
+                                    {
+                                        <div class="d-flex gap-2 queue-actions">
+                                            <a asp-action="AddPrescription" asp-route-id="@item.AppointmentId" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-capsule me-1"></i>Prescription
+                                            </a>
+                                            <a asp-action="AddReport" asp-route-id="@item.AppointmentId" class="btn btn-sm btn-success">
+                                                <i class="bi bi-clipboard2-pulse me-1"></i>Report
+                                            </a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fst-italic">
+                                            <i class="bi bi-hourglass-split me-1"></i>Waiting for receptionist
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
+                                <p class="text-muted mt-2 mb-0">No patients in the queue for today.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

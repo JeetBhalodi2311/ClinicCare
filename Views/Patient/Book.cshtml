@@ -1,0 +1,71 @@
+@model FrontendEXAM.Models.BookAppointmentRequest
+
+@{
+    ViewData["Title"] = "Book Appointment";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2><i class="bi bi-calendar-plus me-2"></i>Book Appointment</h2>
+    <a asp-action="Dashboard" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back to Dashboard</a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-gradient-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Appointment Details</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Book" method="post">
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="AppointmentDate"  class="control-label fw-bold">
+                            <i class="bi bi-calendar3 me-1"></i>Date
+                        </label>
+                        <input asp-for="AppointmentDate" type="date" class="form-control" required min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="TimeSlot" class="control-label fw-bold">
+                            <i class="bi bi-clock me-1"></i>Time Slot
+                        </label>
+                        <select asp-for="TimeSlot" class="form-select" required>
+                            <option value="">Select a time slot...</option>
+                            <option value="09:00-09:15">09:00 - 09:15 AM</option>
+                            <option value="09:15-09:30">09:15 - 09:30 AM</option>
+                            <option value="09:30-09:45">09:30 - 09:45 AM</option>
+                            <option value="09:45-10:00">09:45 - 10:00 AM</option>
+                            <option value="10:00-10:15">10:00 - 10:15 AM</option>
+                            <option value="10:15-10:30">10:15 - 10:30 AM</option>
+                            <option value="10:30-10:45">10:30 - 10:45 AM</option>
+                            <option value="10:45-11:00">10:45 - 11:00 AM</option>
+                            <option value="11:00-11:15">11:00 - 11:15 AM</option>
+                            <option value="11:15-11:30">11:15 - 11:30 AM</option>
+                            <option value="11:30-11:45">11:30 - 11:45 AM</option>
+                            <option value="11:45-12:00">11:45 - 12:00 PM</option>
+                            <option value="14:00-14:15">02:00 - 02:15 PM</option>
+                            <option value="14:15-14:30">02:15 - 02:30 PM</option>
+                            <option value="14:30-14:45">02:30 - 02:45 PM</option>
+                            <option value="14:45-15:00">02:45 - 03:00 PM</option>
+                            <option value="15:00-15:15">03:00 - 03:15 PM</option>
+                            <option value="15:15-15:30">03:15 - 03:30 PM</option>
+                            <option value="15:30-15:45">03:30 - 03:45 PM</option>
+                            <option value="15:45-16:00">03:45 - 04:00 PM</option>
+                            <option value="16:00-16:15">04:00 - 04:15 PM</option>
+                            <option value="16:15-16:30">04:15 - 04:30 PM</option>
+                            <option value="16:30-16:45">04:30 - 04:45 PM</option>
+                            <option value="16:45-17:00">04:45 - 05:00 PM</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Book Appointment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

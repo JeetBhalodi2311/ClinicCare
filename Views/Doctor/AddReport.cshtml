@@ -1,0 +1,54 @@
+@model FrontendEXAM.Models.AddReportRequest
+
+@{
+    ViewData["Title"] = "Add Report";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h2><i class="bi bi-clipboard2-pulse me-2"></i>Add Medical Report</h2>
+    <a asp-action="Dashboard" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back to Queue</a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-gradient-green text-white">
+                <h5 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Report Form</h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="AddReport" method="post">
+                    <input type="hidden" name="id" value="@ViewBag.AppointmentId" />
+
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Diagnosis" class="control-label fw-bold">
+                            <i class="bi bi-heart-pulse me-1"></i>Diagnosis
+                        </label>
+                        <textarea asp-for="Diagnosis" class="form-control" rows="3" required placeholder="Main diagnosis..."></textarea>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="TestRecommended" class="control-label fw-bold">
+                            <i class="bi bi-droplet me-1"></i>Tests Recommended (if any)
+                        </label>
+                        <textarea asp-for="TestRecommended" class="form-control" rows="2" placeholder="Blood test, X-Ray, etc."></textarea>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="Remarks" class="control-label fw-bold">
+                            <i class="bi bi-chat-square-text me-1"></i>Additional Remarks
+                        </label>
+                        <textarea asp-for="Remarks" class="form-control" rows="2" placeholder="Any other observations..."></textarea>
+                    </div>
+
+                    <div class="form-group mt-4 border-top pt-3 d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Save Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
